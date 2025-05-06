@@ -1,8 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import connectDB from './config/db-config.js'
+import connectDB from './config/db-config.js';
 import userRoute from './routes/userRoute/userRoute.js';
+import adminRoute from './routes/adminRoute/adminRoute.js';
 
 connectDB();
 
@@ -16,7 +17,9 @@ app.use(cors({
 }));
 app.use("/uploads", express.static("uploads"));
 app.use(express.json());
+
 app.use('/',userRoute);
+app.use('/admin',adminRoute);
 
 app.listen(process.env.PORT,()=>{
     console.log(` Server is listing in the port :${process.env.PORT}`);

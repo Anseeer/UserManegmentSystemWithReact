@@ -1,0 +1,73 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+  }
+  
+  .SignupWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .SignupCard {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px 40px;
+    width: 350px;
+    text-align: center;
+  }
+  
+  .SignupCard h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .SignupForm input {
+    width: 100%;
+    padding: 10px 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+  }
+  
+  .SignupForm input:focus {
+    border-color: #14497581;
+    outline: none;
+  }
+  
+  .SignupForm button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #14497581;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .SignupForm button:hover {
+    background-color: #426183;
+  }
+  
+  .SignupCard p {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .login-link {
+    color: #14497581;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 5px;
+  }
+  

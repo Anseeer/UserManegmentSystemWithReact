@@ -8,10 +8,10 @@ function HashPass(pass){
 const signup = async (req,res)=>{
    try {
     const {name,email,password} = req.body;
-    const existingUser = await User.findOne({email});
-    if(existingUser) res.status(400).json({msg:"user already exists !"});
+    const existingUser = await User.findOne({email,isAdim:true});
+    if(existingUser) res.status(400).json({msg:"admin already exists !"});
     const hashed = await HashPass(password);
-    const user = new User({name,email,password:hashed,isAdmin:false});
+    const user = new User({name,email,password:hashed,isAdmin:true});
     await user.save();
     res.status(200).json({ msg: 'Signup successful' })
    } catch (error) {
@@ -22,8 +22,9 @@ const signup = async (req,res)=>{
 const login = async (req,res)=>{
     try {
     const {email,password} = req.body;
-    const user = await User.findOne({email});
-    if (!user) return res.status(400).json({ msg: 'User not found' });
+    const user = await User.findOne({email,isAdmin:true});
+    console.log(user)
+    if (!user) return res.status(400).json({ msg: 'Admin not  found' });
 
     const matchPass = await bcrypt.compare(password,user.password);
     if (!matchPass) return res.status(400).json({ msg: 'Incorrect password' });
@@ -36,13 +37,13 @@ const login = async (req,res)=>{
     }
 } 
 
-const updateUser = async(req,res)=>{
+const updateAdmin = async(req,res)=>{
     try {
         const {name,email} = req.body;
         const imageURL = req.file?.path;
         console.log("req:",req.user,req)
         console.log("updated Data",req.body);
-        const user = await User.findOne({email});
+        const user = await User.findOne({email,isAdmin:true});
         if(!user) return res.json({msg:"User Not Found , Faild To Update"});
         user.name = name;
         user.profileImg = imageURL || user.profileImg;
@@ -54,4 +55,4 @@ const updateUser = async(req,res)=>{
     }
 }
 
-export {login , signup , updateUser}; 
+export {login , signup , updateAdmin}; 

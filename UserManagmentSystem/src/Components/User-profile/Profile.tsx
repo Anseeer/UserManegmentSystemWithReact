@@ -1,4 +1,4 @@
-import { FaUser, FaEnvelope, FaPen , FaSyncAlt } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaCamera   , FaSyncAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import "./Profile.css";
 import { RootState } from "../../Redux/Store";
@@ -54,12 +54,12 @@ const Profile = ()=>{
     <div className="profile-container">
       <div className="profile-card">
         <div className="profile-image-wrapper">
-          <img  src={ selectedFile? URL.createObjectURL(selectedFile):`http://localhost:3003/${profile}`}
+          <img  src={ selectedFile? URL.createObjectURL(selectedFile):profile}
            alt="Profile"
            className="profile-img"
            />
           <label htmlFor="profile-upload" className="edit-icon">
-            <FaPen />
+            <FaCamera   />
           </label>
           <input 
           onChange={(e) => {
