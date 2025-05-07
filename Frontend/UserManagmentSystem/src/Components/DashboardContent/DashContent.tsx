@@ -3,6 +3,8 @@ import axios from "axios";
 import "./DashContent.css";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import EditUser from "../EditUser/EditUser";
+import { toast } from "react-toastify";
+import CreateUser from "../Creat-user/CreateUser";
 
 interface User {
   _id?: string;
@@ -17,21 +19,23 @@ const DashContent = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true); 
   const[isEdit,setIsEdit] = useState<boolean>(false);
+  const[isCreate,setCreate] = useState<boolean>(false);
+  const [editUserId, setEditUserId] = useState<string | undefined>(undefined);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get<User[]>("http://localhost:3003/admin/getUser");
+      console.log("res",response.data)
+      setUsers(response.data); // assuming response.data is an array of users
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get<User[]>("http://localhost:3003/admin/getUser");
-        console.log("res",response.data)
-        setUsers(response.data); // assuming response.data is an array of users
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
+   fetchUsers();
   }, []);
 
   const filteredUsers = users.filter(
@@ -39,6 +43,22 @@ const DashContent = () => {
       user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const HandleDelete = async (id: string | undefined) => {
+    if (!id) return;
+  
+    try {
+      await axios.get("http://localhost:3003/admin/deleteUser", {
+        params: { userId: id },
+      });
+      toast.success("Deleted Successfully");
+      fetchUsers();
+    } catch (error) {
+      toast.error("Failed to delete user");
+      console.error("Delete error:", error);
+    }
+  };
+  
 
   return (
     <div className="dashBoard">
@@ -54,11 +74,13 @@ const DashContent = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <button className="createBtn">
+        <button className="createBtn"
+        onClick={()=> setCreate(!isCreate) }
+        >
           <FaPlus /> Create User
         </button>
       </div>
-    
+      {isCreate && <CreateUser setCreate={setCreate} fetchUser={fetchUsers} isCreate={isCreate} />}
       {loading ? (
         <p>Loading users...</p>
       ) : (
@@ -73,21 +95,21 @@ const DashContent = () => {
           <tbody>
             {filteredUsers.length > 0 ? (
               filteredUsers.map((user) => (
-                <tr key={user._id || user.id}>
+                <tr key={user._id}>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>
                   <button 
                   className="iconBtn edit" 
-                  onClick={()=> setIsEdit(!isEdit)}                 >
+                  onClick={()=> {setIsEdit(!isEdit);setEditUserId(user._id)}}
+                  >
                     <FaEdit color="black" />
                   </button>
-                  <button className="iconBtn delete">
-                    <FaTrash color="black" />
-                    </button>
-                </td>
+                  <button className="iconBtn delete" onClick={() => HandleDelete(user._id)}>
+                  <FaTrash color="black" />
+                </button>
 
- 
+                </td>
                 </tr>
               ))
             ) : (
@@ -100,7 +122,7 @@ const DashContent = () => {
           </tbody>
         </table>
       )}
-      {isEdit && <EditUser/> }
+      {isEdit && editUserId && <EditUser id={editUserId} setIsEdit={setIsEdit} isEdit={isEdit} refetchUsers={fetchUsers} /> }
     </div>
   );
 };
