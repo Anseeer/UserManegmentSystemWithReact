@@ -15,6 +15,7 @@ const AdminLogin = () => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:3003/admin/login',form);
+      console.log("res:",res.data)
       dispatch(login(res.data));
       navigate('/admin');
     } catch (error:any) {

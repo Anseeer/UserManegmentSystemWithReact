@@ -26,7 +26,7 @@ const adminSlice = createSlice({
             state.token = action.payload.token;
             state.admin = action.payload.admin;
             state.isAuthenticated = true;
-            console.log(state.token , state.admin)
+            // console.log(state.token , state.admin)
         },
         logout:(state)=>{
             state.token = null;

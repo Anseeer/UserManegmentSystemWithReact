@@ -16,9 +16,9 @@ const DashboardNav = ({ setProfileTab, profileTab }: PropType) => {
 
   const dispatch  = useDispatch();
   const navigate = useNavigate();
-  const admin = useSelector((state:RootState)=> state.admin.admin);
+  const admin = useSelector((state:RootState)=> state.admin?.admin);
   const isAuthenticated = useSelector((state:RootState)=> state.admin.isAuthenticated);
-  
+  console.log("admin",admin)
   const handleLogout = ()=>{
     dispatch(logout());
     localStorage.clear();
@@ -28,7 +28,7 @@ const DashboardNav = ({ setProfileTab, profileTab }: PropType) => {
   return (
     <div className="nav">
       <div className="nav-left">
-        <h3>Welcome,{isAuthenticated?`${admin?.name}`:`Admin`}</h3>
+        <h3>{isAuthenticated?`${admin?.name}`:`Admin`}`s Dashboard</h3>
       </div>
       <div className="nav-center">
         <ul>

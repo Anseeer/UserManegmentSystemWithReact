@@ -11,8 +11,8 @@ const signup = async (req,res)=>{
     const existingUser = await User.findOne({email,isAdim:true});
     if(existingUser) res.status(400).json({msg:"admin already exists !"});
     const hashed = await HashPass(password);
-    const user = new User({name,email,password:hashed,isAdmin:true});
-    await user.save();
+    const admin = new User({name,email,password:hashed,isAdmin:true});
+    await admin.save();
     res.status(200).json({ msg: 'Signup successful' })
    } catch (error) {
     res.status(500).json({msg:error?.message});
@@ -22,15 +22,15 @@ const signup = async (req,res)=>{
 const login = async (req,res)=>{
     try {
     const {email,password} = req.body;
-    const user = await User.findOne({email,isAdmin:true});
-    console.log(user)
-    if (!user) return res.status(400).json({ msg: 'Admin not  found' });
+    const admin = await User.findOne({email,isAdmin:true});
+    console.log(admin)
+    if (!admin) return res.status(400).json({ msg: 'Admin not  found' });
 
-    const matchPass = await bcrypt.compare(password,user.password);
+    const matchPass = await bcrypt.compare(password,admin.password);
     if (!matchPass) return res.status(400).json({ msg: 'Incorrect password' });
 
-    const token = GenerateToken(user._id);
-    return res.json({msg:"Login successfull",token,user})
+    const token = GenerateToken(admin._id);
+    return res.json({msg:"Login successfull",token,admin})
 
     } catch (error) {
         res.status(500).json({msg:error?.message});
@@ -41,18 +41,34 @@ const updateAdmin = async(req,res)=>{
     try {
         const {name,email} = req.body;
         const imageURL = req.file?.path;
-        console.log("req:",req.user,req)
+        console.log("req:",req.admin,req)
         console.log("updated Data",req.body);
-        const user = await User.findOne({email,isAdmin:true});
-        if(!user) return res.json({msg:"User Not Found , Faild To Update"});
-        user.name = name;
-        user.profileImg = imageURL || user.profileImg;
-        await user.save();
-        console.log("user updated return :",user);
-        res.status(200).json({ msg: 'Update successful',user})
+        const admin = await User.findOne({email,isAdmin:true});
+        if(!admin) return res.json({msg:"User Not Found , Faild To Update"});
+        admin.name = name;
+        admin.profileImg = imageURL || admin.profileImg;
+        await admin.save();
+        console.log("user updated return :",admin);
+        res.status(200).json({ msg: 'Update successful',admin})
     } catch (error) {
         res.status(500).json({msg:error?.message});
     }
 }
 
-export {login , signup , updateAdmin}; 
+const getUser = async (req, res) => {
+    try {
+        console.log('get here')
+      const users = await User.find({ isAdmin: false });
+        console.log("find the user")
+      if (!users) {
+        return res.status(404).json({ msg: "Users Not Available, Empty!" });
+      }
+        console.log("GetUser:", users);
+      res.status(200).json(users); 
+    } catch (error) {
+      res.status(500).json({ msg: error?.message || "Internal Server Error" });
+    }
+  };
+  
+
+export {login , signup , updateAdmin ,getUser}; 
