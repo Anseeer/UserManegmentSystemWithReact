@@ -44,10 +44,12 @@ const adminSlice = createSlice({
                 state.admin.email = action.payload.email;
             }
             console.log("action payload",action.payload)
-            }
+            },
+       
     },
+    
 })
 
 
 export default adminSlice.reducer;
-export const {login , logout , updateUser , signup} = adminSlice.actions
+export const {login , logout , updateUser , signup  } = adminSlice.actions

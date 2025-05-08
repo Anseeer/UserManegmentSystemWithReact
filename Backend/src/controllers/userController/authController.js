@@ -9,11 +9,11 @@ const signup = async (req,res)=>{
    try {
     const {name,email,password} = req.body;
     const existingUser = await User.findOne({email});
-    if(existingUser) res.status(400).json({msg:"user already exists !"});
+    if(existingUser) return res.status(400).json({msg:"user already exists !"});
     const hashed = await HashPass(password);
     const user = new User({name,email,password:hashed,isAdmin:false});
     await user.save();
-    const token = GenerateToken(res,user);
+    const token = GenerateToken(res,user._id);
     res.status(200).json({ msg: 'Signup successful',user,token});
    } catch (error) {
     res.status(500).json({msg:error?.message});
@@ -29,7 +29,7 @@ const login = async (req,res)=>{
     const matchPass = await bcrypt.compare(password,user.password);
     if (!matchPass) return res.status(400).json({ msg: 'Incorrect password' });
 
-    const token = GenerateToken(res,user);
+    const token = GenerateToken(res,user._id);
     return res.json({msg:"Login successfull",user,token})
 
     } catch (error) {
@@ -71,4 +71,5 @@ try {
 
 }
 
-export {login , signup , updateUser , logout}; 
+
+export {login , signup , updateUser , logout }; 

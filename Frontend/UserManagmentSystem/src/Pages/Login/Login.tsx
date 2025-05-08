@@ -12,11 +12,30 @@ const Login = () => {
   const navigate = useNavigate();
 
   const HandleLogin =async (e:React.FormEvent)=>{
+
+    const { email, password } = form;
+
+    if (!email || !password) {
+      return toast.warn("Please fill in all fields.");
+    }
+  
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return toast.warn("Please enter a valid email address.");
+    }
+  
+    if (password.length < 6) {
+      return toast.warn("Password must be at least 6 characters long.");
+    }
+
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:3003/login',form);
+      const res = await axios.post('http://localhost:3003/login',form,{
+        withCredentials: true,
+      });
       console.log("Res:",res.data)
       dispatch(login(res.data));
+      localStorage.setItem("user",JSON.stringify(res.data));
       navigate('/');
     } catch (error:any) {
       console.log("err",error.response.data.msg)

@@ -23,6 +23,7 @@ const EditUser: React.FC<EditUserProps> = ({ id, isEdit, setIsEdit ,refetchUsers
           params: {
             userId: id,
           },
+          withCredentials:true,
         });
         setUserData({ name: user.data.name, email: user.data.email });
       } catch (error) {
@@ -35,7 +36,7 @@ const EditUser: React.FC<EditUserProps> = ({ id, isEdit, setIsEdit ,refetchUsers
   const handleSave = async () => {
     try {
       const data = userData;
-      const res = await axios.post("http://localhost:3003/updateUser", data);
+      const res = await axios.post("http://localhost:3003/updateUser",data,{withCredentials:true});
       dispatch(updateUser(res.data.user));
       refetchUsers();
       toast.success("Edit successfully");

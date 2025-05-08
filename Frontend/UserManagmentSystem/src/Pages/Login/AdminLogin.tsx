@@ -13,10 +13,28 @@ const AdminLogin = () => {
 
   const HandleLogin =async (e:React.FormEvent)=>{
     e.preventDefault();
+    const { email, password } = form;
+    console.log("HandleLogin")
+    if (!email || !password) {
+      return toast.warn("Please fill in all fields.");
+    }
+  
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return toast.warn("Please enter a valid email address.");
+    }
+  
+    if (password.length < 6) {
+      return toast.warn("Password must be at least 6 characters long.");
+    }
+
     try {
-      const res = await axios.post('http://localhost:3003/admin/login',form);
+      const res = await axios.post('http://localhost:3003/admin/login',form,{
+        withCredentials:true,
+      });
       console.log("res:",res.data)
       dispatch(login(res.data));
+      localStorage.setItem("admin",JSON.stringify(res.data.admin));
       toast.success('Logged in successfully');
       navigate('/admin');
     } catch (error:any) {

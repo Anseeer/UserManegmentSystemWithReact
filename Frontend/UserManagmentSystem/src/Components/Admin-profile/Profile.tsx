@@ -1,7 +1,7 @@
 import { FaUser, FaEnvelope, FaCamera   , FaSyncAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import "./Profile.css";
-import { RootState } from "../../Redux/Store";
+import { AppDispatch, RootState } from "../../Redux/Store";
 import { getProfileImage } from "../../Utilities/profileImg";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -12,8 +12,9 @@ const Profile = ()=>{
   const admin = useSelector((state:RootState)=> state.admin.admin);
   const[adminData,setadminData] = useState({name:"",email:"",profileImg:""});
   const[selectedFile,setSelectedFile] = useState<File|null>(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const profile = getProfileImage(admin?.name||"",admin?.profileImg);
+  
   
   useEffect(() => {
     if (admin) {
@@ -22,9 +23,9 @@ const Profile = ()=>{
         email: admin.email,
         profileImg: admin.profileImg || "",
       });
-    }
-    
+    }    
   }, [admin]);
+
 
   console.log("profile",profile);
   console.log("profileImg",admin?.profileImg);
@@ -41,7 +42,9 @@ const Profile = ()=>{
       const res = await axios.post('http://localhost:3003/admin/updateAdmin',formData,{
         headers: {
           "Content-Type": "multipart/form-data", 
-        },})
+        },
+        withCredentials:true,
+      })
         console.log("res",res)
       dispatch(updateUser(res.data.admin));
       toast.success("Profile updated!");
@@ -94,3 +97,4 @@ const Profile = ()=>{
 };
 
 export default Profile;
+

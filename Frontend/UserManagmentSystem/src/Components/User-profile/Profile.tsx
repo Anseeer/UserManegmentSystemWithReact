@@ -41,7 +41,9 @@ const Profile = ()=>{
       const res = await axios.post('http://localhost:3003/updateUser',formData,{
         headers: {
           "Content-Type": "multipart/form-data", 
-        },})
+        },
+        withCredentials: true, 
+      })
         console.log("res",res)
       dispatch(updateUser(res.data.user));
       toast.success("Profile updated!");

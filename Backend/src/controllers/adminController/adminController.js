@@ -7,14 +7,16 @@ function HashPass(pass){
 
 const signup = async (req,res)=>{
    try {
+    console.log("Enter into the signup function")
     const {name,email,password} = req.body;
     const existingUser = await User.findOne({email,isAdim:true});
     if(existingUser) res.status(400).json({msg:"admin already exists !"});
     const hashed = await HashPass(password);
     const admin = new User({name,email,password:hashed,isAdmin:true});
+    console.log("Admin:",admin);
     await admin.save();
-    const token = GenerateToken(res,admin);
-    res.status(200).json({ msg: 'Signup successful',admin,token})
+    const token = GenerateToken(res,admin._id);
+    res.status(200).json({msg:'Signup successful',admin,token})
    } catch (error) {
     res.status(500).json({msg:error?.msg});
    }
@@ -30,7 +32,7 @@ const login = async (req,res)=>{
     const matchPass = await bcrypt.compare(password,admin.password);
     if (!matchPass) return res.status(400).json({ msg: 'Incorrect password' });
 
-    const token = GenerateToken(res,admin);
+    const token = GenerateToken(res,admin._id);
     return res.json({msg:"Login successfull",token,admin})
 
     } catch (error) {

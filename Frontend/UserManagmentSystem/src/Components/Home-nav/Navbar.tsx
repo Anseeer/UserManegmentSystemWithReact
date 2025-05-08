@@ -22,7 +22,9 @@ const Navbar = ({ setProfileTab, profileTab }: PropType) => {
   const isAuthenticated = useSelector((state:RootState)=> state.user.isAuthenticated);
   
   const handleLogout =async ()=>{
-    const res = await axios.get('http://localhost:3003/logout');
+    const res = await axios.get('http://localhost:3003/logout',{
+      withCredentials:true,
+    });
         console.log(res.data)
     toast.success(res.data.msg);
     dispatch(logout());

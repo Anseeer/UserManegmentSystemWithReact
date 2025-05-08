@@ -24,7 +24,7 @@ const DashContent = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get<User[]>("http://localhost:3003/admin/getUser");
+      const response = await axios.get<User[]>("http://localhost:3003/admin/getUser",{withCredentials:true});
       console.log("res",response.data)
       setUsers(response.data); 
     } catch (error) {
@@ -50,6 +50,7 @@ const DashContent = () => {
     try {
       await axios.get("http://localhost:3003/admin/deleteUser", {
         params: { userId: id },
+        withCredentials:true,
       });
       toast.success("Deleted Successfully");
       fetchUsers();
@@ -128,3 +129,4 @@ const DashContent = () => {
 };
 
 export default DashContent;
+

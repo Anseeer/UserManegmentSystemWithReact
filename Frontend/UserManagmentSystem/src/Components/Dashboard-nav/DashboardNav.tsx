@@ -22,12 +22,12 @@ const DashboardNav = ({ setProfileTab, profileTab }: PropType) => {
   const isAuthenticated = useSelector((state:RootState)=> state.admin.isAuthenticated);
   console.log("admin",admin)
   const handleLogout =async ()=>{
-  const res = await axios.get('http://localhost:3003/logout');
+  const res = await axios.get('http://localhost:3003/logout',{withCredentials:true});
   console.log(res.data)
   toast.success(res.data.msg);
   dispatch(logout());
-localStorage.clear();
-navigate('/admin');
+  localStorage.clear();
+  navigate('/admin');
   }
 
   return (

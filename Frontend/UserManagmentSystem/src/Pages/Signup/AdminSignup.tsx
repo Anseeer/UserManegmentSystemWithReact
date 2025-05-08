@@ -13,10 +13,32 @@ const AdminSignup = ()=> {
   const dispatch = useDispatch();
   const HandleSubmit = async (e:React.FormEvent)=>{
     e.preventDefault();
+    const { name, email, password } = form;
+
+  if (!name || !email || !password) {
+    return toast.warn("All fields are required");
+  }
+
+  if (name.trim().length < 3) {
+    return toast.warn("Name must be at least 3 characters long");
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return toast.warn("Please enter a valid email address");
+  }
+
+  if (password.length < 6) {
+    return toast.warn("Password must be at least 6 characters long");
+  }
     try {
       console.log(form);
-      const res = await axios.post('http://localhost:3003/admin/signup',form);   
+      const res = await axios.post('http://localhost:3003/admin/signup',form,{
+        withCredentials:true,
+      });
+      console.log("res:",res.data)
       dispatch(signup(res.data));
+      localStorage.setItem("admin",JSON.stringify(res.data));
       navigate('/admin');
       toast.success("Signup SuccessFull")
     } catch (error:any) {
@@ -28,7 +50,7 @@ const AdminSignup = ()=> {
     <div className="SignupWrapper">
       <div className="SignupCard">
         <h2>ADMIN : Sign Up</h2>
-        <form onSubmit={HandleSubmit } className="SignupForm" >
+        <form onSubmit={HandleSubmit} className="SignupForm" >
           <input name="name" value={form.name} onChange={(e)=> setForm({...form,name:e.target.value})} type="text" placeholder="Enter your name" />
           <input name="email" value={form.email} onChange={(e)=> setForm({...form,email:e.target.value})}  type="email" placeholder="Email (example@gmail.com)" />
           <input name="password" value={form.password} onChange={(e)=> setForm({...form,password:e.target.value})}  type="password" placeholder="Enter password" />

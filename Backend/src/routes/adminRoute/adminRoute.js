@@ -6,9 +6,9 @@ const adminRoute = express.Router();
 
 adminRoute.post('/signup',signup);
 adminRoute.post('/login',login);
-adminRoute.get('/deleteUser',deleteUser);
-adminRoute.post('/updateAdmin',upload.single("profileImg"),updateAdmin);
-adminRoute.get('/getUser',getUser);
+adminRoute.get('/deleteUser',Protected,deleteUser);
+adminRoute.post('/updateAdmin',Protected,upload.single("profileImg"),updateAdmin);
+adminRoute.get('/getUser',Protected,getUser);
 
   
 export default adminRoute;
