@@ -4,6 +4,7 @@ interface UserInfo {
     name: string;
     email: string;
     profileImg?: string;
+    isAdmin:boolean;
   }
   
   interface UserState {
@@ -22,15 +23,22 @@ const userSlice = createSlice({
     name:'user',
     initialState,
     reducers:{
+        signup :(state,action:PayloadAction<{token:string,user:UserInfo}>)=>{
+            state.token = action.payload.token;
+            state.user = action.payload.user;
+            state.isAuthenticated = true;
+            console.log("stateToken",state.token ,"stateUser",state.user)
+        },
         login :(state,action:PayloadAction<{token:string,user:UserInfo}>)=>{
             state.token = action.payload.token;
             state.user = action.payload.user;
             state.isAuthenticated = true;
-            console.log(state.token , state.user)
+            console.log("stateToken",state.token ,"stateUser",state.user)
         },
         logout:(state)=>{
             state.token = null;
             state.isAuthenticated = false;
+            state.user = null;
         },
         updateUser:(state,action:PayloadAction<UserInfo>)=>{
             if(state.user){
@@ -45,4 +53,4 @@ const userSlice = createSlice({
 
 
 export default userSlice.reducer;
-export const {login , logout , updateUser} = userSlice.actions
+export const {login , logout , updateUser , signup} = userSlice.actions

@@ -3,17 +3,21 @@ import "./AdminSignup.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { signup } from "../../Redux/Slices/adminSlice";
 
 
 const AdminSignup = ()=> {
    const[form,setForm] = useState({name:'',email:'',password:''});
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const HandleSubmit = async (e:React.FormEvent)=>{
     e.preventDefault();
     try {
       console.log(form);
-      await axios.post('http://localhost:3003/admin/signup',form);   
-      navigate('/adminLogin')
+      const res = await axios.post('http://localhost:3003/admin/signup',form);   
+      dispatch(signup(res.data));
+      navigate('/admin');
       toast.success("Signup SuccessFull")
     } catch (error:any) {
       toast.error(error.response.data.msg || "Signup failed")

@@ -13,7 +13,8 @@ const signup = async (req,res)=>{
     const hashed = await HashPass(password);
     const user = new User({name,email,password:hashed,isAdmin:false});
     await user.save();
-    res.status(200).json({ msg: 'Signup successful' })
+    const token = GenerateToken(res,user);
+    res.status(200).json({ msg: 'Signup successful',user,token});
    } catch (error) {
     res.status(500).json({msg:error?.message});
    }
@@ -28,8 +29,8 @@ const login = async (req,res)=>{
     const matchPass = await bcrypt.compare(password,user.password);
     if (!matchPass) return res.status(400).json({ msg: 'Incorrect password' });
 
-    const token = GenerateToken(user._id);
-    return res.json({msg:"Login successfull",token,user})
+    const token = GenerateToken(res,user);
+    return res.json({msg:"Login successfull",user,token})
 
     } catch (error) {
         res.status(500).json({msg:error?.message});
@@ -54,4 +55,20 @@ const updateUser = async(req,res)=>{
     }
 }
 
-export {login , signup , updateUser}; 
+const logout =async (req,res)=>{
+try {
+    console.log("logout function")
+    res.clearCookie('user-management-jwt', {
+        httpOnly: true,
+        secure: true, 
+        sameSite: 'strict',
+      });
+      return res.status(200).json({ msg: 'Logged out successfully' });
+      
+} catch (error) {
+    res.status(500).json({msg:error?.message});
+}
+
+}
+
+export {login , signup , updateUser , logout}; 

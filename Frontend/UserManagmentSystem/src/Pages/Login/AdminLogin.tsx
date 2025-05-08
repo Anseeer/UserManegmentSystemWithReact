@@ -17,6 +17,7 @@ const AdminLogin = () => {
       const res = await axios.post('http://localhost:3003/admin/login',form);
       console.log("res:",res.data)
       dispatch(login(res.data));
+      toast.success('Logged in successfully');
       navigate('/admin');
     } catch (error:any) {
       console.log("err",error.response.data.msg)

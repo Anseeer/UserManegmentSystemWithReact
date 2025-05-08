@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import User from "../models/userModel/userSchema";
+import User from "../models/userModel/userSchema.js";
 
 const Protected = async (req,res,next)=>{
     let Token;
@@ -16,7 +16,7 @@ const Protected = async (req,res,next)=>{
     }
 
     if (!Token) {
-        return res.status(401).json({ message: 'Not authorized, no token' });
+        return res.status(401).json({ msg: 'Not authorized, no token' });
       }
 }
 

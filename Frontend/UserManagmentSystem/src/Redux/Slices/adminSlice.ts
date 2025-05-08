@@ -4,6 +4,7 @@ interface AdminInfo {
     name: string;
     email: string;
     profileImg?: string;
+    isAuthenticated:boolean;
   }
   
   interface AdminState {
@@ -22,11 +23,15 @@ const adminSlice = createSlice({
     name:'admin',
     initialState,
     reducers:{
+        signup :(state,action:PayloadAction<{token:string,admin:AdminInfo}>)=>{
+            state.token = action.payload.token;
+            state.admin = action.payload.admin;
+            state.isAuthenticated = true;
+        },
         login :(state,action:PayloadAction<{token:string,admin:AdminInfo}>)=>{
             state.token = action.payload.token;
             state.admin = action.payload.admin;
             state.isAuthenticated = true;
-            // console.log(state.token , state.admin)
         },
         logout:(state)=>{
             state.token = null;
@@ -45,4 +50,4 @@ const adminSlice = createSlice({
 
 
 export default adminSlice.reducer;
-export const {login , logout , updateUser} = adminSlice.actions
+export const {login , logout , updateUser , signup} = adminSlice.actions

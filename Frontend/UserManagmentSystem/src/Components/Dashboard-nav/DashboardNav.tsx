@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../Redux/Slices/adminSlice";
 import {useNavigate } from "react-router-dom";
 import { RootState } from "../../Redux/Store";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 
 interface PropType {
@@ -19,10 +21,13 @@ const DashboardNav = ({ setProfileTab, profileTab }: PropType) => {
   const admin = useSelector((state:RootState)=> state.admin?.admin);
   const isAuthenticated = useSelector((state:RootState)=> state.admin.isAuthenticated);
   console.log("admin",admin)
-  const handleLogout = ()=>{
-    dispatch(logout());
-    localStorage.clear();
-    navigate('/adminLogin');
+  const handleLogout =async ()=>{
+  const res = await axios.get('http://localhost:3003/logout');
+  console.log(res.data)
+  toast.success(res.data.msg);
+  dispatch(logout());
+localStorage.clear();
+navigate('/admin');
   }
 
   return (
@@ -43,11 +48,11 @@ const DashboardNav = ({ setProfileTab, profileTab }: PropType) => {
           alt="profile_icon"
           style={{ cursor: "pointer" }}
         />
-        <img 
+        {isAuthenticated && <img 
         onClick={handleLogout}
         src={logout_icon} 
         alt="logout_icon"
-        />
+        />}
       </div>
     </div>
   );

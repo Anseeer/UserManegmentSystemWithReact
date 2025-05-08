@@ -50,47 +50,55 @@ const Profile = ()=>{
     }
   }
 
-  return (
+  return user ? (
     <div className="profile-container">
       <div className="profile-card">
         <div className="profile-image-wrapper">
-          <img  src={ selectedFile? URL.createObjectURL(selectedFile):profile}
-           alt="Profile"
-           className="profile-img"
-           />
+          <img
+            src={selectedFile ? URL.createObjectURL(selectedFile) : profile}
+            alt="Profile"
+            className="profile-img"
+          />
           <label htmlFor="profile-upload" className="edit-icon">
-            <FaCamera   />
+            <FaCamera />
           </label>
-          <input 
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) {
-              setSelectedFile(file); 
-            }
-          }}
-          type="file" 
-          id="profile-upload" 
-          accept="image/*" 
-          hidden
+          <input
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                setSelectedFile(file);
+              }
+            }}
+            type="file"
+            id="profile-upload"
+            accept="image/*"
+            hidden
           />
         </div>
-
+  
         <div className="profile-info">
           <label>
             <FaUser style={{ marginRight: "8px" }} />
             Username:
-            <input value={userData?.name} onChange={(e)=> setuserData({...userData,name:e.target.value})} type="text"  />
+            <input
+              value={userData?.name}
+              onChange={(e) => setuserData({ ...userData, name: e.target.value })}
+              type="text"
+            />
           </label>
           <label>
             <FaEnvelope style={{ marginRight: "8px" }} />
             Email:
             <label>{user?.email}</label>
           </label>
-          <button onClick={handleChange} >Change <FaSyncAlt style={{ marginRight: "8px" }}/></button>
+          <button onClick={handleChange}>
+            Change <FaSyncAlt style={{ marginRight: "8px" }} />
+          </button>
         </div>
       </div>
     </div>
-  );
+  ) : null;
+  
 };
 
 export default Profile;

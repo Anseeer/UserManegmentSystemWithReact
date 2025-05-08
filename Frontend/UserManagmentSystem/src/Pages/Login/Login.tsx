@@ -15,6 +15,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:3003/login',form);
+      console.log("Res:",res.data)
       dispatch(login(res.data));
       navigate('/');
     } catch (error:any) {

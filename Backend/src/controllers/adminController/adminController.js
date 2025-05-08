@@ -13,9 +13,10 @@ const signup = async (req,res)=>{
     const hashed = await HashPass(password);
     const admin = new User({name,email,password:hashed,isAdmin:true});
     await admin.save();
-    res.status(200).json({ msg: 'Signup successful' })
+    const token = GenerateToken(res,admin);
+    res.status(200).json({ msg: 'Signup successful',admin,token})
    } catch (error) {
-    res.status(500).json({msg:error?.message});
+    res.status(500).json({msg:error?.msg});
    }
 } 
 
@@ -29,7 +30,7 @@ const login = async (req,res)=>{
     const matchPass = await bcrypt.compare(password,admin.password);
     if (!matchPass) return res.status(400).json({ msg: 'Incorrect password' });
 
-    const token = GenerateToken(admin._id);
+    const token = GenerateToken(res,admin);
     return res.json({msg:"Login successfull",token,admin})
 
     } catch (error) {

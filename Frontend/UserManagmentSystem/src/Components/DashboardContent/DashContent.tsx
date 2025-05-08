@@ -26,7 +26,7 @@ const DashContent = () => {
     try {
       const response = await axios.get<User[]>("http://localhost:3003/admin/getUser");
       console.log("res",response.data)
-      setUsers(response.data); // assuming response.data is an array of users
+      setUsers(response.data); 
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {
