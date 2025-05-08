@@ -71,5 +71,15 @@ try {
 
 }
 
+    const authCheck = async(req,res)=>{
+        try {
+            const user = req.user;
+            console.log("REQUSER:",user);
+            return res.json({user});
+        } catch (error) {
+            res.status(500).json({msg:error?.message});
+        }
+    }
 
-export {login , signup , updateUser , logout }; 
+
+export {login , signup , updateUser , authCheck,logout }; 

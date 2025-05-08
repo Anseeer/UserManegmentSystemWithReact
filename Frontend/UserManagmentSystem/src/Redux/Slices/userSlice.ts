@@ -47,10 +47,14 @@ const userSlice = createSlice({
                 state.user.email = action.payload.email;
             }
             console.log("action payload",action.payload)
-            }
+            },
+            setUser :(state,action:PayloadAction<UserInfo>)=>{
+                            state.user = action.payload;
+                            state.isAuthenticated = true;
+            },
     },
 })
 
 
 export default userSlice.reducer;
-export const {login , logout , updateUser , signup} = userSlice.actions
+export const {login , logout , updateUser , signup ,setUser} = userSlice.actions

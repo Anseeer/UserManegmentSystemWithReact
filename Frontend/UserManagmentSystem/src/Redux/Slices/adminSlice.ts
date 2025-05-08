@@ -36,6 +36,7 @@ const adminSlice = createSlice({
         logout:(state)=>{
             state.token = null;
             state.isAuthenticated = false;
+            state.admin = null;
         },
         updateUser:(state,action:PayloadAction<AdminInfo>)=>{
             if(state.admin){
@@ -45,6 +46,10 @@ const adminSlice = createSlice({
             }
             console.log("action payload",action.payload)
             },
+            setAdmin :(state,action:PayloadAction<AdminInfo>)=>{
+                state.admin = action.payload;
+                state.isAuthenticated = true;
+            },
        
     },
     
@@ -52,4 +57,4 @@ const adminSlice = createSlice({
 
 
 export default adminSlice.reducer;
-export const {login , logout , updateUser , signup  } = adminSlice.actions
+export const {login , logout , updateUser , signup ,setAdmin } = adminSlice.actions

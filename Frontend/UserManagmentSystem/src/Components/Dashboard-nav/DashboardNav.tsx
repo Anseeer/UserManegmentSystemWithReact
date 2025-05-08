@@ -3,18 +3,13 @@ import profile_icon from "../../assets/profile_icon.png";
 import logout_icon from "../../assets/logout_icon.png";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../Redux/Slices/adminSlice";
-import {useNavigate } from "react-router-dom";
+import {useNavigate , Link } from "react-router-dom";
 import { RootState } from "../../Redux/Store";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 
-interface PropType {
-  setProfileTab: React.Dispatch<React.SetStateAction<boolean>>; 
-  profileTab: boolean; 
-}
-
-const DashboardNav = ({ setProfileTab, profileTab }: PropType) => {
+const DashboardNav = () => {
 
   const dispatch  = useDispatch();
   const navigate = useNavigate();
@@ -42,12 +37,20 @@ const DashboardNav = ({ setProfileTab, profileTab }: PropType) => {
         </ul>
       </div>
       <div className="nav-right">
-        <img
+        {/* <img
           onClick={() => {isAuthenticated?setProfileTab(!profileTab):navigate('/adminLogin')}}
           src={profile_icon}
           alt="profile_icon"
           style={{ cursor: "pointer" }}
-        />
+        /> */}
+        <Link to="/adminLogin">
+        {!isAuthenticated && <img
+          src={profile_icon}
+          alt="profile_icon"
+          style={{ cursor: "pointer" }}
+        /> }
+        
+        </Link>
         {isAuthenticated && <img 
         onClick={handleLogout}
         src={logout_icon} 

@@ -12,7 +12,7 @@ const Dashboard = () => {
 
   return (
     <div className="home">
-      <DashboardNav setProfileTab={setProfileTab} profileTab={profileTab} />
+      <DashboardNav  />
       {profileTab && <Profile/>}
       {!profileTab && admin && <DashContent />}
       
